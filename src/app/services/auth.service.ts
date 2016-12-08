@@ -20,7 +20,8 @@ export class AuthService {
             login(username: string, password: string) {
                 let headers = new Headers({ 'Content-Type': 'application/json' });
                 let options = new RequestOptions({ headers: headers });
-                        return this.http.post('http://localhost:8010/token', JSON.stringify({ u: username, p: password }), options).map(res => res.json(), err => err);
+
+                return this.http.post('http://localhost:8010/token', JSON.stringify({ u: username, p: password }), options).map(res => res.json(), err => err);
             }
 
             logout() {

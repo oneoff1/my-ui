@@ -10,7 +10,6 @@ import { AlertService, AuthService } from '../services/index';
 export class LoginComponent implements OnInit {
 
   model: any = {};
-  loading = false;
 
   constructor(
     private router: Router,
@@ -25,20 +24,26 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
-    this.loading = true;
     this.authSrv.login(this.model.username, this.model.password).subscribe(
       data => {
         if (data && data.v) {
           // store user details and jwt token in local storage to keep user logged in between page refreshes
           localStorage.setItem('id_token', data.v);
           this.router.navigate(['/']);
-        } else {
+        } else {                       
           this.alertService.error(data.message);
         }
       },
       error => {
-        this.alertService.error(error.json().message);
-        this.loading = false;
+        if (error && error.json()) {
+          if(error.message){
+            this.alertService.error(error.message);
+          }else{
+            this.alertService.error("Server Error");
+          }
+        } else {
+          this.alertService.error("Unknown Error");
+        }
       }
     );
   }
